@@ -45,9 +45,9 @@
   .search-bar .search-label-row { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:3px; }
   .search-bar .row { gap: 14px; }
   .search-bar .search-label-ar { color: rgba(255,255,255,.76); font-size: 10px; font-weight: 500; direction: rtl; text-align: right; white-space: nowrap; }
-  .search-bar .form-control { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.35); color: #fff; font-size: 12px; height: 32px; padding: 0 9px; }
+  .search-bar .form-control {  border-color: rgba(255,255,255,.35); font-size: 12px; height: 32px; padding: 0 9px; }
   .search-bar .form-control::placeholder { color: rgba(255,255,255,.5); }
-  .search-bar .form-control:focus { background: rgba(255,255,255,.28); border-color: #fff; box-shadow: none; }
+  .search-bar .form-control:focus { border-color: #fff; box-shadow: none; }
 
   /* Found banner */
   #found-banner { background: #d9edf7; border-bottom: 1px solid #bce8f1; color: #31708f; font-size: 12px; }
@@ -275,7 +275,8 @@
               <input type="text" class="form-control" id="s-mobile" placeholder="e.g. 99214668">
             </div>
             <div class="col-12 col-lg-auto">
-              <button type="button" class="btn btn-light btn-sm fw-semibold w-100 w-lg-auto search-action-btn" onclick="doLoad()">
+              <!-- <button type="button" class="btn btn-light btn-sm fw-semibold w-100 w-lg-auto search-action-btn" onclick="doLoad()"> -->
+              <button type="button" class="btn btn-light btn-outline-primary me-2 btn-sm fw-semibold w-100 w-lg-auto search-action-btn" onclick="doLoad()">
                 <i class="fa-solid fa-magnifying-glass"></i> Load Details | تحميل التفاصيل
               </button>
             </div>
