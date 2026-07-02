@@ -5,8 +5,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Client Presentation Hub · Employee Registration Prototypes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
     * {
       box-sizing: border-box;
@@ -270,13 +273,116 @@
       background: #f8fafc;
     }
 
-    .modal-body img {
+    .modal-zoom-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-zoom-btn {
+      border: 1px solid #d0d7de;
+      background: #ffffff;
+      color: #212529;
+      border-radius: 0.375rem;
+      min-width: 30px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1;
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      transition: all 0.2s ease;
+      padding: 0 8px;
+    }
+
+    .modal-zoom-btn:hover {
+      background: #f8f9fa;
+      border-color: #adb5bd;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+
+    .modal-zoom-btn:active {
+      background: #e9ecef;
+      border-color: #adb5bd;
+      transform: translateY(1px);
+    }
+
+    .modal-zoom-btn.primary {
+      background: #0d6efd;
+      border-color: #0d6efd;
+      color: #ffffff;
+    }
+
+    .modal-zoom-btn.primary:hover {
+      background: #0b5ed7;
+      border-color: #0a58ca;
+      color: #ffffff;
+    }
+
+    .modal-zoom-btn.secondary {
+      background: #6c757d;
+      border-color: #6c757d;
+      color: #ffffff;
+    }
+
+    .modal-zoom-btn.secondary:hover {
+      background: #5c636a;
+      border-color: #565e64;
+      color: #ffffff;
+    }
+
+    .modal-zoom-value {
+      min-width: 46px;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: #495057;
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 0.375rem;
+      padding: 4px 8px;
+      letter-spacing: 0.02em;
+    }
+
+    .modal-image-shell {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow: auto;
+      padding: 4px 0 8px;
+      cursor: zoom-in;
+      user-select: none;
+    }
+
+    .modal-image-shell.zoomed {
+      cursor: move;
+    }
+
+    .modal-image-shell.dragging {
+      cursor: grabbing;
+    }
+
+    .modal-image {
       width: 100%;
+      max-width: 100%;
       height: auto;
       display: block;
       border-radius: 10px;
       border: 1px solid #e2e8f0;
       background: #ffffff;
+      transform: translate(var(--image-translate-x, 0px), var(--image-translate-y, 0px)) scale(var(--image-zoom, 1));
+      transform-origin: top center;
+      transition: transform 0.2s ease;
+    }
+
+    .modal-image.dragging-image {
+      transition: none;
     }
 
     .eyebrow {
@@ -610,15 +716,97 @@
         <button type="button" class="modal-close" aria-label="Close" onclick="closeCurrentFormModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <img src="Images/CurrentRegister.png" alt="Current Employee Registration Form Screenshot">
+        <div class="modal-zoom-toolbar" role="toolbar" aria-label="Image zoom controls">
+          <button type="button" class="modal-zoom-btn secondary" onclick="adjustImageZoom(-0.1)" aria-label="Zoom out"><i class="fa-solid fa-minus"></i></button>
+          <span class="modal-zoom-value" id="modalZoomValue">100%</span>
+          <button type="button" class="modal-zoom-btn primary" onclick="adjustImageZoom(0.1)" aria-label="Zoom in"><i class="fa-solid fa-plus"></i></button>
+          <button type="button" class="modal-zoom-btn" onclick="resetImageZoom()" aria-label="Reset zoom"><i class="fa-solid fa-rotate-left"></i></button>
+        </div>
+        <div class="modal-image-shell">
+          <img id="currentFormImage" class="modal-image" src="Images/CurrentRegister.png" alt="Current Employee Registration Form Screenshot">
+        </div>
       </div>
     </div>
   </div>
 
   <script>
+    let currentImageZoom = 1;
+    let currentTranslateX = 0;
+    let currentTranslateY = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragStartTranslateX = 0;
+    let dragStartTranslateY = 0;
+
+    function applyImageZoom() {
+      const image = document.getElementById('currentFormImage');
+      const shell = document.querySelector('.modal-image-shell');
+      const value = document.getElementById('modalZoomValue');
+      if (image) {
+        image.style.setProperty('--image-zoom', currentImageZoom);
+        image.style.setProperty('--image-translate-x', currentTranslateX + 'px');
+        image.style.setProperty('--image-translate-y', currentTranslateY + 'px');
+      }
+      if (shell) {
+        shell.classList.toggle('zoomed', currentImageZoom > 1);
+      }
+      if (value) {
+        value.textContent = Math.round(currentImageZoom * 100) + '%';
+      }
+    }
+
+    function adjustImageZoom(step) {
+      currentImageZoom = Math.min(2, Math.max(0.9, Number((currentImageZoom + step).toFixed(2))));
+      if (currentImageZoom <= 1) {
+        currentTranslateX = 0;
+        currentTranslateY = 0;
+      }
+      applyImageZoom();
+    }
+
+    function resetImageZoom() {
+      currentImageZoom = 1;
+      currentTranslateX = 0;
+      currentTranslateY = 0;
+      applyImageZoom();
+    }
+
+    function startImageDrag(event) {
+      if (currentImageZoom <= 1) return;
+      event.preventDefault();
+      isDragging = true;
+      dragStartX = event.clientX;
+      dragStartY = event.clientY;
+      dragStartTranslateX = currentTranslateX;
+      dragStartTranslateY = currentTranslateY;
+      const shell = document.querySelector('.modal-image-shell');
+      const image = document.getElementById('currentFormImage');
+      if (shell) shell.classList.add('dragging');
+      if (image) image.classList.add('dragging-image');
+    }
+
+    function dragImage(event) {
+      if (!isDragging) return;
+      event.preventDefault();
+      currentTranslateX = dragStartTranslateX + (event.clientX - dragStartX);
+      currentTranslateY = dragStartTranslateY + (event.clientY - dragStartY);
+      applyImageZoom();
+    }
+
+    function endImageDrag() {
+      if (!isDragging) return;
+      isDragging = false;
+      const shell = document.querySelector('.modal-image-shell');
+      const image = document.getElementById('currentFormImage');
+      if (shell) shell.classList.remove('dragging');
+      if (image) image.classList.remove('dragging-image');
+    }
+
     function openCurrentFormModal() {
       const modal = document.getElementById('currentFormModal');
       if (modal) {
+        resetImageZoom();
         modal.classList.add('open');
         document.body.style.overflow = 'hidden';
       }
@@ -630,6 +818,7 @@
       if (event && event.target !== modal) return;
       modal.classList.remove('open');
       document.body.style.overflow = '';
+      resetImageZoom();
     }
 
     document.addEventListener('keydown', function (event) {
@@ -637,6 +826,22 @@
         closeCurrentFormModal();
       }
     });
+
+    const imageShell = document.querySelector('.modal-image-shell');
+    const imageElement = document.getElementById('currentFormImage');
+    if (imageShell) {
+      imageShell.addEventListener('mousedown', startImageDrag);
+      imageShell.addEventListener('mousemove', dragImage);
+      imageShell.addEventListener('mouseup', endImageDrag);
+      imageShell.addEventListener('mouseleave', endImageDrag);
+    }
+    if (imageElement) {
+      imageElement.addEventListener('mouseup', endImageDrag);
+    }
+    document.addEventListener('mousemove', dragImage);
+    document.addEventListener('mouseup', endImageDrag);
+
+    applyImageZoom();
   </script>
 
   <footer>
