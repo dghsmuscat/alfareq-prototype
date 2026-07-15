@@ -135,17 +135,18 @@
               <div class="text-muted mt-2" style="font-size: 10px; max-width: 160px; line-height: 1.3">
                 Supports JPG, PNG.<br>Max size 2MB
               </div>
+              <!-- Civil ID — below portrait photo -->
+              <div class="field-row d-flex align-items-center civil-row py-1 mt-2">
+                <div class="civil-label-row">
+                  <span class="lbl-en">Civil ID <span class="text-danger">*</span></span>
+                  <span class="lbl-ar">الرقم المدني</span>
+                </div>
+                <input type="text" class="form-control civil-ctrl" id="civil-id" placeholder="123456789">
+              </div>
             </div>
 
             <!-- Form Fields Column -->
             <div class="col-12 col-md-10 px-md-3 py-2">
-              <!-- Civil ID — centred -->
-              <div class="field-row d-flex align-items-center civil-row py-1">
-                <span class="lbl-en">Civil ID <span class="text-danger">*</span></span>
-                <input type="text" class="form-control civil-ctrl" id="civil-id" placeholder="123456789">
-                <span class="lbl-ar">الرقم المدني</span>
-              </div>
-
               <!-- Date of join | Staff # -->
               <div class="field-row d-flex align-items-center py-1">
                 <span class="lbl-en">Date of join <span class="text-danger">*</span></span>
@@ -432,13 +433,13 @@
                   <!-- Panel: Leave Period (Unpaid Leave) -->
                   <div id="panel-unpaid-leave" class="d-none">
                     <div class="field-row d-flex align-items-center py-1">
-                      <span class="lbl-en">From <span class="text-danger">*</span></span>
-                      <input type="date" class="form-control" id="leave-from">
-                      <span class="lbl-ar">من</span>
-                      <div style="width:24px;flex-shrink:0"></div>
                       <span class="lbl-en">To <span class="text-danger">*</span></span>
                       <input type="date" class="form-control" id="leave-to">
                       <span class="lbl-ar">إلى</span>
+                      <div style="width:24px;flex-shrink:0"></div>
+                      <span class="lbl-en">From <span class="text-danger">*</span></span>
+                      <input type="date" class="form-control" id="leave-from">
+                      <span class="lbl-ar">من</span>
                     </div>
                   </div>
 
@@ -474,13 +475,13 @@
                       <span class="lbl-ar">ندب إلى</span>
                     </div>
                     <div class="field-row d-flex align-items-center py-1">
-                      <span class="lbl-en">From <span class="text-danger">*</span></span>
-                      <input type="date" class="form-control" id="secondment-from">
-                      <span class="lbl-ar">من</span>
-                      <div style="width:24px;flex-shrink:0"></div>
-                      <span class="lbl-en">To <span class="text-danger">*</span></span>
+                     <span class="lbl-en">To <span class="text-danger">*</span></span>
                       <input type="date" class="form-control" id="secondment-to-date">
                       <span class="lbl-ar">إلى</span>
+                      <div style="width:24px;flex-shrink:0"></div>
+                       <span class="lbl-en">From <span class="text-danger">*</span></span>
+                      <input type="date" class="form-control" id="secondment-from">
+                      <span class="lbl-ar">من</span>
                     </div>
                   </div>
 
@@ -542,13 +543,13 @@
                       <span class="lbl-ar">التخصص</span>
                     </div>
                     <div class="field-row d-flex align-items-center py-1">
-                      <span class="lbl-en">From <span class="text-danger">*</span></span>
-                      <input type="date" class="form-control" id="study-from">
-                      <span class="lbl-ar">من</span>
-                      <div style="width:24px;flex-shrink:0"></div>
-                      <span class="lbl-en">To <span class="text-danger">*</span></span>
+                     <span class="lbl-en">To <span class="text-danger">*</span></span>
                       <input type="date" class="form-control" id="study-to">
                       <span class="lbl-ar">إلى</span>
+                      <div style="width:24px;flex-shrink:0"></div>
+                       <span class="lbl-en">From <span class="text-danger">*</span></span>
+                      <input type="date" class="form-control" id="study-from">
+                      <span class="lbl-ar">من</span>
                     </div>
                   </div>
 

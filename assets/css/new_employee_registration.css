@@ -167,6 +167,7 @@ body {
 .lbl-en {
   width: 115px;
   font-size: 12px;
+  font-weight: bold;
   color: #444;
   text-align: right;
   padding-right: 8px;
@@ -176,7 +177,8 @@ body {
 .lbl-ar {
   width: 115px;
   font-size: 12px;
-  color: #888;
+  font-weight: bold;
+  color: #444;
   text-align: left;
   padding-left: 8px;
   white-space: nowrap;
@@ -226,11 +228,33 @@ body {
 
 .civil-row {
   justify-content: center;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.civil-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  flex: 1 1 100%;
+}
+
+.civil-label-row .lbl-en {
+  width: auto;
+  text-align: left;
+  padding-right: 0;
+}
+
+.civil-label-row .lbl-ar {
+  width: auto;
+  text-align: right;
+  padding-left: 0;
 }
 
 .civil-row .civil-ctrl {
-  width: 210px;
-  flex: none;
+  width: 100%;
+  flex: 1 1 100%;
 }
 
 .form-select[dir=rtl] {
