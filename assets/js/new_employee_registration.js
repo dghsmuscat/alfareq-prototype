@@ -384,10 +384,27 @@ function resetAll() {
   goTab(1);
 }
 
+function applyMobileFieldRowClasses() {
+  var isMobile = window.innerWidth <= 767;
+  document.querySelectorAll('.field-row').forEach(function (row) {
+    row.classList.remove('mobile-standard-row', 'mobile-bilingual-pair');
+    if (!isMobile || row.classList.contains('civil-row')) {
+      return;
+    }
+    if (row.querySelector('[id$="-ar"]')) {
+      row.classList.add('mobile-bilingual-pair');
+      return;
+    }
+    row.classList.add('mobile-standard-row');
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   document.querySelectorAll('.nav-link[data-tab]').forEach(function (link) {
     link.addEventListener('click', function (event) {
       event.preventDefault();
     });
   });
+  applyMobileFieldRowClasses();
+  window.addEventListener('resize', applyMobileFieldRowClasses);
 });
